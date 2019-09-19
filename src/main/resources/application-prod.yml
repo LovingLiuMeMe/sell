@@ -1,9 +1,11 @@
 server:
   servlet:
-    context-path: /sell/
+    context-path: /sell
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: root
     url: jdbc:mysql://127.0.0.1:3306/sell?characterEncoding=utf-8&useSSL=false
+sell:
+  imageHost: http://img.www.lovingliu.cn/ftpfile/
