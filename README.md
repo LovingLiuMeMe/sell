@@ -37,3 +37,4 @@ public void TestUpdateById(){
 **在做修改的时候，千万不要以为这两个注解不会为字段值为null的字段生成sql，如果前端传进来一个实体对象，部分字段没有传，这时候如果使用xxxRepository.save(entity) 方法，他会把null的字段设置为空，而不是不生成sql**
 
 ### 2.@Data 可不写get/set/toString方法
+### 3.@Transient 忽略数据库字段（替代VO）
