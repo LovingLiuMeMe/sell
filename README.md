@@ -100,3 +100,114 @@ public class OrderMasterToOrderDTO {
 其实看一下整个类,其实就是工具类，所有的方法都为静态方法，所以该类也可以说是静态类。基本可以全局共享，不必创建它的实例对象，所以并不用交给Spring管理(IOC).  
 
 **但是 OrderDetailRepository 并不能实例化(new OrderDetailRepository())** 所以选择方法一
+
+### 5.JPA分页数据的二次封装
+```java
+    @Override
+    public Page<OrderDTO> findList(String buyerOpenid, Pageable pageable) {
+        Page<OrderMaster> orderMasterPage = orderMasterRepository.findByBuyerOpenid(buyerOpenid,pageable);
+        // 此处不需要抛异常
+        List<OrderDTO> orderDTOList = OrderMasterToOrderDTO.convert(orderMasterPage.getContent());
+        /**
+         * @Desc 将Pageable进行二次封装
+         * @Author LovingLiu
+        */
+        Page<OrderDTO> orderDTOPage = new PageImpl<>(orderDTOList,pageable,orderMasterPage.getTotalElements());
+        return orderDTOPage;
+    }
+```
+### 6.java Date类型转换成 long类型
+1.low写法 创建VO对象循环遍历 并封装
+```java
+Page<OrderDTO> orderDTOPage = orderService.findList(openId,pageRequest);
+List<OrderDTO> sortOrderDTOList = orderDTOPage.getContent();
+for(OrderDTO orderDTO:sortOrderDTOList){
+    orderVODTO.setCreateTime(orderDTO.getCreateTime().getTime() / 100);
+    orderVODTO.setUpdateTime(orderDTO.getUpdateTime().getTime() / 100);
+}
+```
+2.利用@RestController的序列化为json的特点
+1.创建序列化工具类 并实现`JsonSerializer`接口
+```java
+package cn.lovingliu.sell.util.serializer;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+
+import java.io.IOException;
+import java.util.Date;
+
+/**
+ * @Author：LovingLiu
+ * @Description:
+ * @Date：Created in 2019-09-22
+ */
+public class DateToLongSerializer extends JsonSerializer<Date> {
+    @Override
+    public void serialize(Date value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+        gen.writeNumber(value.getTime() / 1000);
+    }
+}
+```
+2.在要序列化的类的具体属性上添加`@JsonSerialize`
+```java
+package cn.lovingliu.sell.dto;
+
+import cn.lovingliu.sell.dataobject.OrderDetail;
+import cn.lovingliu.sell.util.serializer.DateToLongSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.Data;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * @Author：LovingLiu
+ * @Description: 数据传输对象 在各个层之间传输
+ * @Date：Created in 2019-09-19
+ */
+@Data
+public class OrderDTO {
+    private String orderId;
+    private String buyerName;
+    private String buyerPhone;
+    private String buyerAddress;
+    private String buyerOpenid;
+    private BigDecimal orderAmount;
+    // 订单状态 默认为新下单
+    private Integer orderStatus;
+    // 支付状态 默认为未支付
+    private Integer payStatus;
+
+    @JsonSerialize(using = DateToLongSerializer.class)
+    private Date createTime;
+
+    @JsonSerialize(using = DateToLongSerializer.class)
+    private Date updateTime;
+
+    private List<OrderDetail> orderDetailList;
+
+
+}
+```
+### 7.设置序列化(是否必须返回字段)
+1.当属性有值时 才进行序列化  
+**全局**  
+application-prod.yml
+```xml
+spring:
+  jackson:
+    default-property-inclusion: non_null
+```
+**单例**  
+在具体类上应用`@JsonInclude(JsonInclude.Include.NON_NULL)`
+
+2.当值为null时,希望String类型,值为null时 返回"",List类型值为null时，返回[]
+移除所有关于 `@JsonInclude(JsonInclude.Include.NON_NULL)` 设置
+然后设置类的初始值
+```java
+    private String buyerName = "";
+    private List<OrderDetail> orderDetailList = new ArrayList<>();
+```

@@ -88,10 +88,12 @@ public class OrderServiceImpl implements OrderService {
         }
         // 4.订单入库
         OrderMaster orderMaster = new OrderMaster();
+        orderDTO.setOrderId(orderId);
         BeanUtils.copyProperties(orderDTO, orderMaster);
-        orderMaster.setOrderId(orderId);
+
         orderMaster.setOrderStatus(OrderStatusEnum.NEW.getCode());
         orderMaster.setPayStatus(PayStatusEnum.WAIT.getCode());
+        orderMaster.setOrderAmount(orderAllAmount);
         orderMasterRepository.save(orderMaster);
         // 5.扣库存 (就算多个商品也只会调用一次)
         // lambda表达式
