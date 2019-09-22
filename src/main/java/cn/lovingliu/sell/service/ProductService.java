@@ -1,8 +1,11 @@
 package cn.lovingliu.sell.service;
 
 import cn.lovingliu.sell.dataobject.ProductInfo;
+import cn.lovingliu.sell.dto.CartDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 /**
  * @Author：LovingLiu
@@ -25,5 +28,7 @@ public interface ProductService {
     ProductInfo save(ProductInfo productInfo);
 
     //加减库存
+    void increaseStock(List<CartDTO> cartDTOList);
 
+    void decreaseStock(List<CartDTO> cartDTOList);
 }

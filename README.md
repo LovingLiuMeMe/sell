@@ -38,3 +38,65 @@ public void TestUpdateById(){
 
 ### 2.@Data 可不写get/set/toString方法
 ### 3.@Transient 忽略数据库字段（替代VO）
+### 4.类的静态属性注入问题
+```java
+package cn.lovingliu.sell.convert;
+
+import cn.lovingliu.sell.dataobject.OrderDetail;
+import cn.lovingliu.sell.dataobject.OrderMaster;
+import cn.lovingliu.sell.dto.OrderDTO;
+import cn.lovingliu.sell.enums.ResultStatusEnum;
+import cn.lovingliu.sell.exception.SellException;
+import cn.lovingliu.sell.repository.OrderDetailRepository;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * @Author：LovingLiu
+ * @Description:
+ * @Date：Created in 2019-09-21
+ */
+@Component
+public class OrderMasterToOrderDTO {
+    @Autowired
+    private static OrderDetailRepository orderDetailRepository;
+    
+    public static OrderDTO convert(OrderMaster orderMaster){
+        if(orderMaster == null){
+            throw new SellException(ResultStatusEnum.ORDER_NOT_EXIT);
+        }
+        OrderDTO orderDTO = new OrderDTO();
+        BeanUtils.copyProperties(orderMaster,orderDTO);
+        List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(orderMaster.getOrderId());
+        if(CollectionUtils.isEmpty(orderDetailList)){
+            throw new SellException(ResultStatusEnum.ORDER_DETAIL_NOT_EXIT);
+        }
+        orderDTO.setOrderDetailList(orderDetailList);
+        return orderDTO;
+    }
+
+    public static List<OrderDTO> convert(List<OrderMaster> orderMasterList){
+        return orderMasterList.stream().map(e ->
+            convert(e)
+        ).collect(Collectors.toList());
+    }
+}
+```
+当调用时会抛出`空指针异常`。原因就是 你试图@Autowired一个静态变量。  
+静态变量/类变量不是对象的属性,而是一个类的属性,spring则是基于对象层面上的依赖注入.  
+解决办法1: 增加set方法 并`@Autowired`
+```java
+    @Autowired
+    public void setOrderDetailRepository(OrderDetailRepository orderDetailRepository){
+        OrderMasterToOrderDTO.orderDetailRepository = orderDetailRepository;
+    }
+```
+解决办法2: new OrderDetailRepository()  
+其实看一下整个类,其实就是工具类，所有的方法都为静态方法，所以该类也可以说是静态类。基本可以全局共享，不必创建它的实例对象，所以并不用交给Spring管理(IOC).  
+
+**但是 OrderDetailRepository 并不能实例化(new OrderDetailRepository())** 所以选择方法一
