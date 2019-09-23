@@ -11,8 +11,7 @@ sell:
   imageHost: http://img.www.lovingliu.cn/ftpfile/
 wx:
   mp:
-    configs:
-      - appId: wxd0491840b258a176 #（一个公众号的appid）
-        secret: 8920134334693cdb35e3281d598088f6 #（公众号的appsecret）
-        token: lovingliu #（接口配置里的Token值）
-        aesKey: 5X0BfVHuIIG5NlTSc3psWI9nuE3ffRHMipbEip5wTWN #（接口配置里的EncodingAESKey值）
+    appId: wxd0491840b258a176 #（一个公众号的appid）
+    secret: 8920134334693cdb35e3281d598088f6 #（公众号的appsecret）
+    token: lovingliu #（接口配置里的Token值）
+    aesKey: 5X0BfVHuIIG5NlTSc3psWI9nuE3ffRHMipbEip5wTWN #（接口配置里的EncodingAESKey值）

@@ -219,5 +219,7 @@ https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_auth
 1.@AllArgsConstructor  
 @AllArgsContructor： 会生成一个包含所有变量，同时如果变量使用了NotNull annotation ， 会进行是否为空的校验.  
 2.@EnableConfigurationProperties  
-如果一个配置类只配置@ConfigurationProperties注解，而没有使用@Component，那么在IOC容器中是获取不到properties 配置文件转化的bean。说白了 @EnableConfigurationProperties 相当于把使用 @ConfigurationProperties 的类进行了一次注入。  
-@EnableConfigurationProperties  = @Component + @ConfigurationProperties
+`@EnableConfigurationProperties`注解的作用是：使使用 `@ConfigurationProperties` 注解的类生效。  
+如果一个配置类只配置`@ConfigurationProperties`注解，而没有使用`@Component`，那么在IOC容器中是获取不到properties 配置文件转化的bean。说白了 `@EnableConfigurationProperties` 相当于把使用 `@ConfigurationProperties` 的类进行了一次注入。  
+当`@EnableConfigurationProperties`注解应用到你的`@Configuration`时， 任何被`@ConfigurationProperties`注解的beans将自动被`Environment`属性配置。  
+**不使用 `@EnableConfigurationProperties` 进行注册，使用 `@Component` 注册**
