@@ -223,3 +223,44 @@ https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_auth
 如果一个配置类只配置`@ConfigurationProperties`注解，而没有使用`@Component`，那么在IOC容器中是获取不到properties 配置文件转化的bean。说白了 `@EnableConfigurationProperties` 相当于把使用 `@ConfigurationProperties` 的类进行了一次注入。  
 当`@EnableConfigurationProperties`注解应用到你的`@Configuration`时， 任何被`@ConfigurationProperties`注解的beans将自动被`Environment`属性配置。  
 **不使用 `@EnableConfigurationProperties` 进行注册，使用 `@Component` 注册**
+
+### 10.@Configuration
+`@Configuration` 用于定义配置类，可替换XML配置文件，被注解的类内部包含一个或多个`@Bean`注解方法。  
+1.1、`@Configuration`配置spring并启动spring容器  
+`@Configuration`标注在类上，相当于把该类作为spring的xml配置文件中的`<beans>`，作用为：配置spring容器(应用上下文)  
+
+1.2、`@Configuration`启动容器+`@Bean`注册Bean，`@Bean`下管理bean的生命周期  
+`@Bean`标注在方法上(返回某个实例的方法)，等价于spring的xml配置文件中的`<bean>`，作用为：注册bean对象  
+
+**@Bean下管理bean的生命周期**  
+可以使用基于 Java 的配置来管理 bean 的生命周期。`@Bean` 支持两种属性，即 `initMethod` 和`destroyMethod`，这些属性可用于定义生命周期方法。在实例化 `bean` 或即将销毁它时，容器便可调用生命周期方法。  
+
+```java
+@Configuration
+public class TestConfiguration {
+    public TestConfiguration() {
+        System.out.println("TestConfiguration容器启动初始化。。。");
+    }
+
+    //@Bean注解注册bean,同时可以指定初始化和销毁方法
+    @Bean(name="testBean",initMethod="start",destroyMethod="cleanUp")
+    @Scope("prototype")
+    public TestBean testBean() {
+        return new TestBean();
+    }
+}
+```
+1.3、@Configuration启动容器+@Component注册Bean  
+**总结**  
+`@Configuation`等价于`<Beans></Beans>`  
+`@Bean`等价于`<Bean></Bean>`  
+`@ComponentScan`等价于`<context:component-scan base-package="com.dxz.demo"/>`  
+`@Component` 等价于`<Bean></Bean>`  
+**`@Bean` VS `@Component`**
+两个注解的结果是相同的，bean都会被添加到Spring上下文中。
+`@Component` 标注的是类,允许通过自动扫描发现。`@Bean`需要在配置类`@Configuation`中使用。
+`@Component`类使用的方法或字段时不会使用CGLIB增强。而在`@Configuration`类中使用方法或字段时则使用CGLIB创造协作对象
+假设我们需要将一些第三方的库组件装配到应用中或者 我们有一个在多个应用程序中共享的模块，它包含一些服务。并非所有应用都需要它们。
+
+如果在这些服务类上使用`@Component`并在应用程序中使用组件扫描，我们最终可能会检测到超过必要的bean。导致应用程序无法启动
+但是我们可以使用 `@Bean`来加载。

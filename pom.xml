@@ -63,6 +63,23 @@
             <artifactId>weixin-java-mp</artifactId>
             <version>3.5.0</version>
         </dependency>
+
+        <!-- 微信支付的第三方依赖 -->
+        <dependency>
+            <groupId>cn.springboot</groupId>
+            <artifactId>best-pay-sdk</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+
+        <!-- 微信支付详情页面 动态注入参数 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId></groupId>
+            <artifactId></artifactId>
+        </dependency>
     </dependencies>
 
     <build>

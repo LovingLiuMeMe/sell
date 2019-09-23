@@ -31,4 +31,25 @@ public class WechatAccountConfig {
      * 设置微信公众号的EncodingAESKey
      */
     private String aesKey;
+
+    /**
+     * 设置商户的商户id（商户平台可查）
+     */
+    private String mchId;
+
+    /**
+     * 设置商户的商户密钥（商户平台可查）
+     */
+    private String mchKey;
+
+    /**
+     * 设置商户的证书路径（商户平台可查）
+    */
+    private String keyPath;
+
+    /**
+     * 设置支付异步回调地址
+     */
+    private String notifyUrl;
+
 }

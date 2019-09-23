@@ -17,3 +17,7 @@ wx:
     secret: 8920134334693cdb35e3281d598088f6 #（公众号的appsecret）
     token: lovingliu #（接口配置里的Token值）
     aesKey: 5X0BfVHuIIG5NlTSc3psWI9nuE3ffRHMipbEip5wTWN #（接口配置里的EncodingAESKey值）
+    mchId:  商户id
+    mchKey: 商户密钥
+    keyPath: 商户证书地址
+    notifyUrl: 异步通知地址
