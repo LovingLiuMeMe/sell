@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 /**
  * @Author：LovingLiu
- * @Description:
+ * @Description: 临时使用 微信验证服务器所需要的
  * @Date：Created in 2019-09-22
  */
 @RestController

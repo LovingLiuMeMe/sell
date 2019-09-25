@@ -13,6 +13,7 @@ public enum ResultStatusEnum {
     CART_EMPTY(2,"购物车为空"),
     WECHAT_PARAMS_ERROR(3,"微信参数配置错误"),
     WECHAT_MP_ERROR(4, "微信公众账号异常"),
+    WXPAY_NOTIFY_MONEY_VERIFY(5,"微信支付异步通知校验不通过"),
   PRODUCT_NOT_EXIT(10,"商品不存在"),
   PRODUCT_STOCK_ERROR(11,"库存不足，无法下单"),
   ORDER_NOT_EXIT(12,"订单不存在"),

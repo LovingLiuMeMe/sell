@@ -25,11 +25,14 @@ import java.net.URLEncoder;
 public class WechatController {
     @Autowired
     private WxMpService wxMpService;
-
+    /**
+     * @Desc returnUrl 前端传入 获取到openid后跳转的页面 如:login->main
+     * @Author LovingLiu
+    */
     @GetMapping("authorize")
     public String authorize(String returnUrl){
-        String url = "http://ae24d766.ngrok.io/sell/wechat/userinfo";
-        String redirectUrl = this.wxMpService.oauth2buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, URLEncoder.encode(returnUrl));
+        String willRedirectUrl = "http://d37a1d85.ngrok.io/sell/wechat/userinfo";
+        String redirectUrl = this.wxMpService.oauth2buildAuthorizationUrl(willRedirectUrl, WxConsts.OAuth2Scope.SNSAPI_USERINFO, URLEncoder.encode(returnUrl));
         log.info("【微信网页授权获取code】{}",redirectUrl);
         // 重定向到授权页面 注意:个人公众号到以后 都是无法进行开发的
         return "redirect:"+redirectUrl;

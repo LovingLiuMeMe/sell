@@ -29,7 +29,10 @@ public class PayController {
 
     @Autowired
     private PayService payService;
-
+    /**
+     * @Desc 支付订单
+     * @Author LovingLiu
+    */
     @GetMapping("/pay")
     public ModelAndView index(@RequestParam("openid") String openid,
                               @RequestParam("orderId") String orderId,
@@ -42,11 +45,12 @@ public class PayController {
         if(orderDTO==null){
             throw new SellException(ResultStatusEnum.ORDER_NOT_EXIT);
         }
-        //2.发起支付
+        //2.发起支付 生成预付订单(等待用户支付)
         orderDTO.setBuyerOpenid(openid);
         PayResponse payResponse=payService.create(orderDTO);
 
         map.put("payResponse",payResponse);
+        // 设置支付成功后的回调
         map.put("returnUrl","http://www.imooc.com");
 
         return new ModelAndView("pay/create",map);
@@ -69,7 +73,6 @@ public class PayController {
 
         return new ModelAndView("pay/create",map);
     }
-
     /**
      * 微信异步通知
      * @param notifyData
@@ -81,8 +84,7 @@ public class PayController {
         payService.notify(notifyData);
 
         //返回给微信处理结果
-//        String string="";
+        //return String string="<xml>....</xml>";
         return new ModelAndView("pay/success");
     }
-
 }

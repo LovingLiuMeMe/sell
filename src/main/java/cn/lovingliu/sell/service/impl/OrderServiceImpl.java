@@ -14,6 +14,7 @@ import cn.lovingliu.sell.repository.OrderDetailRepository;
 import cn.lovingliu.sell.repository.OrderMasterRepository;
 import cn.lovingliu.sell.repository.ProductInfoRepository;
 import cn.lovingliu.sell.service.OrderService;
+import cn.lovingliu.sell.service.PayService;
 import cn.lovingliu.sell.service.ProductService;
 import cn.lovingliu.sell.util.BigDecimalUtil;
 import cn.lovingliu.sell.util.KeyUtil;
@@ -49,6 +50,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderMasterRepository orderMasterRepository;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private PayService payService;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.REPEATABLE_READ)
@@ -110,6 +113,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO findOne(String orderId) {
         OrderMaster orderMaster = orderMasterRepository.findById(orderId).orElse(null);
+        if(orderMaster == null){
+            log.error("【微信支付】 异步通知，订单不存在，orderId={}",orderId);
+            throw new SellException(ResultStatusEnum.ORDER_NOT_EXIT);
+        }
         return OrderMasterToOrderDTO.convert(orderMaster);
     }
 
@@ -160,7 +167,7 @@ public class OrderServiceImpl implements OrderService {
 
         // 如果已支付要退款
         if(orderDTO.getPayStatus().equals(PayStatusEnum.SUCCESS.getCode())){
-            //TODO
+            payService.refund(orderDTO);
         }
         return orderDTO;
     }
