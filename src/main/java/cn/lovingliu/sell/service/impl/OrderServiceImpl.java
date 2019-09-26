@@ -1,5 +1,6 @@
 package cn.lovingliu.sell.service.impl;
 
+import cn.lovingliu.sell.convert.OrderDTOToOrerVO;
 import cn.lovingliu.sell.convert.OrderMasterToOrderDTO;
 import cn.lovingliu.sell.dataobject.OrderDetail;
 import cn.lovingliu.sell.dataobject.OrderMaster;
@@ -18,6 +19,7 @@ import cn.lovingliu.sell.service.PayService;
 import cn.lovingliu.sell.service.ProductService;
 import cn.lovingliu.sell.util.BigDecimalUtil;
 import cn.lovingliu.sell.util.KeyUtil;
+import cn.lovingliu.sell.vo.OrderVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -225,10 +227,11 @@ public class OrderServiceImpl implements OrderService {
      * @Author LovingLiu
     */
     @Override
-    public Page<OrderDTO> findList(Pageable pageable) {
+    public Page<OrderVO> findList(Pageable pageable) {
         Page<OrderMaster> orderMasterPage = orderMasterRepository.findAll(pageable);
         List<OrderDTO> orderDTOList = OrderMasterToOrderDTO.convert(orderMasterPage.getContent());
-        Page<OrderDTO> pageOrderDTO = new PageImpl<>(orderDTOList,pageable,orderMasterPage.getTotalElements());
-        return pageOrderDTO;
+        List<OrderVO> orderVOList = OrderDTOToOrerVO.convert(orderDTOList);
+        Page<OrderVO> pageOrderVO = new PageImpl<>(orderVOList,pageable,orderMasterPage.getTotalElements());
+        return pageOrderVO;
     }
 }

@@ -20,4 +20,13 @@ public enum OrderStatusEnum {
         this.code = code;
         this.desc = desc;
     }
+
+    public static OrderStatusEnum getOrderStatusEnum(Integer code){
+        for(OrderStatusEnum orderStatusEnum:OrderStatusEnum.values()){
+            if(orderStatusEnum.code == code){
+                return orderStatusEnum;
+            }
+        }
+        return null;
+    }
 }

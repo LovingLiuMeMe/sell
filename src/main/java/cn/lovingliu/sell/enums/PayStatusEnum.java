@@ -19,4 +19,12 @@ public enum PayStatusEnum {
         this.code = code;
         this.desc = desc;
     }
+    public static PayStatusEnum getPayStatusEnum(Integer code){
+        for(PayStatusEnum payStatusEnum:PayStatusEnum.values()){
+            if(payStatusEnum.code == code){
+                return payStatusEnum;
+            }
+        }
+        return null;
+    }
 }

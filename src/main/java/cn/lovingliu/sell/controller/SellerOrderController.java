@@ -1,7 +1,7 @@
 package cn.lovingliu.sell.controller;
 
-import cn.lovingliu.sell.dto.OrderDTO;
 import cn.lovingliu.sell.service.OrderService;
+import cn.lovingliu.sell.vo.OrderVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,6 +34,9 @@ public class SellerOrderController {
                              @RequestParam Map<String,Object> map){
         Sort sort = new Sort(sortLift.equals("desc")? Sort.Direction.DESC : Sort.Direction.ASC,sortBy);
         PageRequest pageRequest = PageRequest.of(pageNum - 1, pageSize, sort);
-        Page<OrderDTO> orderDTOPage = orderService.findList(pageRequest);
+        Page<OrderVO> orderVOPage = orderService.findList(pageRequest);
+        map.put("orderVOPage", orderVOPage);
+
+        return new ModelAndView("order/list", map);
     }
 }
