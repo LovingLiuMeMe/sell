@@ -220,4 +220,15 @@ public class OrderServiceImpl implements OrderService {
         }
         return orderDTO;
     }
+    /**
+     * @Desc 卖家端 查询所有订单
+     * @Author LovingLiu
+    */
+    @Override
+    public Page<OrderDTO> findList(Pageable pageable) {
+        Page<OrderMaster> orderMasterPage = orderMasterRepository.findAll(pageable);
+        List<OrderDTO> orderDTOList = OrderMasterToOrderDTO.convert(orderMasterPage.getContent());
+        Page<OrderDTO> pageOrderDTO = new PageImpl<>(orderDTOList,pageable,orderMasterPage.getTotalElements());
+        return pageOrderDTO;
+    }
 }

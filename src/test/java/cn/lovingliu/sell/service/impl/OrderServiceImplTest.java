@@ -95,4 +95,11 @@ public class OrderServiceImplTest {
         log.info("finish order result :{}",result);
         Assert.assertNotNull(result);
     }
+    @Test
+    public void findAll(){
+        Sort sort = new Sort(Sort.Direction.DESC,"updateTime");
+        PageRequest pageRequest = PageRequest.of(0,10,sort);
+        Page<OrderDTO> page = orderService.findList(pageRequest);
+        Assert.assertTrue("查询所有订单列表",page.getTotalElements() > 0);
+    }
 }
