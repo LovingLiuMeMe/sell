@@ -1,9 +1,11 @@
 package cn.lovingliu.sell.vo;
 
+import cn.lovingliu.sell.dataobject.OrderDetail;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @Author：LovingLiu
@@ -23,4 +25,6 @@ public class OrderVO {
     private String orderStatusMessage;
     private String payStatusMessage;
     private String createTime;
+
+    private List<OrderDetail> orderDetailList;
 }

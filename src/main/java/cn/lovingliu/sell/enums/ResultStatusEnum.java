@@ -9,6 +9,7 @@ import lombok.Getter;
  */
 @Getter
 public enum ResultStatusEnum {
+    SUCCESS(0,"操作成功"),
     PARAMS_ERROR(1,"参数错误"),
     CART_EMPTY(2,"购物车为空"),
     WECHAT_PARAMS_ERROR(3,"微信参数配置错误"),

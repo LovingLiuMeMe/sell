@@ -144,8 +144,8 @@ public class OrderServiceImpl implements OrderService {
             throw new SellException(ResultStatusEnum.ORDER_NOT_EXIT);
         }
         // 判断订单状态
-        if(orderMaster.getOrderStatus().equals(OrderStatusEnum.FINISGHED)
-                ||orderMaster.getOrderStatus().equals(OrderStatusEnum.CANCEL)
+        if(orderMaster.getOrderStatus().equals(OrderStatusEnum.FINISGHED.getCode())
+                ||orderMaster.getOrderStatus().equals(OrderStatusEnum.CANCEL.getCode())
         ){
             throw new SellException(ResultStatusEnum.ORDER_CANNOT_CANCEL);
         }

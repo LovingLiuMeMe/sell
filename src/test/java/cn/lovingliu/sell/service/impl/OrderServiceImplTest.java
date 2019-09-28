@@ -3,6 +3,7 @@ package cn.lovingliu.sell.service.impl;
 import cn.lovingliu.sell.dataobject.OrderDetail;
 import cn.lovingliu.sell.dto.OrderDTO;
 import cn.lovingliu.sell.service.OrderService;
+import cn.lovingliu.sell.vo.OrderVO;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;
@@ -99,7 +100,7 @@ public class OrderServiceImplTest {
     public void findAll(){
         Sort sort = new Sort(Sort.Direction.DESC,"updateTime");
         PageRequest pageRequest = PageRequest.of(0,10,sort);
-        Page<OrderDTO> page = orderService.findList(pageRequest);
+        Page<OrderVO> page = orderService.findList(pageRequest);
         Assert.assertTrue("查询所有订单列表",page.getTotalElements() > 0);
     }
 }
