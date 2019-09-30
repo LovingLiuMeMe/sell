@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @Author：LovingLiu
@@ -26,5 +27,10 @@ public class ProductInfo {
     /** 商品状态: 0 正常 1下架*/
     private Integer productStatus;
     private Integer categoryType;
+
+    /** 排序字段需要使用*/
+    private Date createTime;
+
+    private Date updateTime;
 
 }

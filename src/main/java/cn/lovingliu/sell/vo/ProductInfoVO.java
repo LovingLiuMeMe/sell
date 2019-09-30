@@ -12,10 +12,22 @@ import java.math.BigDecimal;
  */
 @Data
 public class ProductInfoVO {
-    private String id;
+    @JsonProperty("id")
+    private String productId;
     @JsonProperty("name")
     private String productName;
-    private BigDecimal price;
-    private String description;
-    private String icon;
+    @JsonProperty("description")
+    private String productDescription;
+    @JsonProperty("icon")
+    private String productIcon;
+
+    private BigDecimal productPrice;
+    private Integer productStock;
+    /** 商品状态: 0 正常 1下架*/
+    private String productStatusMessage;
+
+    private Integer categoryType;
+
+    private String createTime;
+    private String updateTime;
 }

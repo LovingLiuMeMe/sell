@@ -1,6 +1,7 @@
 package cn.lovingliu.sell.controller;
 
 import cn.lovingliu.sell.common.ServerResponse;
+import cn.lovingliu.sell.convert.ProductInfoToProductInfoVO;
 import cn.lovingliu.sell.dataobject.ProductCategory;
 import cn.lovingliu.sell.dataobject.ProductInfo;
 import cn.lovingliu.sell.enums.ProductStatusEnum;
@@ -65,13 +66,7 @@ public class BuyerProductController {
             productCategoryVO.setCategoryName(productCategory.getCategoryName());
             productCategoryVO.setCategoryType(productCategory.getCategoryType());
 
-            List<ProductInfoVO> productInfoVOList = Lists.newArrayList();
-            for(ProductInfo productInfo:productInfoList){
-                if(productInfo.getCategoryType() == productCategoryVO.getCategoryType()){
-                    //this.assembleProductInfoVO(productInfo) 操作等于 BeanUtils.copyProperties(productInfo, productCategoryVO);
-                    productInfoVOList.add(this.assembleProductInfoVO(productInfo));
-                }
-            }
+            List<ProductInfoVO> productInfoVOList = ProductInfoToProductInfoVO.convert(productInfoList);
 
             productCategoryVO.setFoods(productInfoVOList);
             productCategoryVOList.add(productCategoryVO);
@@ -79,15 +74,4 @@ public class BuyerProductController {
         return ServerResponse.createBySuccess("成功",productCategoryVOList);
     }
 
-
-
-    private ProductInfoVO assembleProductInfoVO(ProductInfo productInfo){
-        ProductInfoVO productInfoVO = new ProductInfoVO();
-        productInfoVO.setIcon(this.imageHost+productInfo.getProductIcon());
-        productInfoVO.setId(productInfo.getProductId());
-        productInfoVO.setDescription(productInfo.getProductDescription());
-        productInfoVO.setPrice(productInfo.getProductPrice());
-        productInfoVO.setProductName(productInfo.getProductName());
-        return productInfoVO;
-    }
 }

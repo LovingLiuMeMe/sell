@@ -5,7 +5,7 @@ package cn.lovingliu.sell.enums;
  * @Description: 商品状态
  * @Date：Created in 2019-09-19
  */
-public enum ProductStatusEnum {
+public enum ProductStatusEnum implements CodeEnum{
     UP(0,"上架"),
     DOWN(1,"下架");
 

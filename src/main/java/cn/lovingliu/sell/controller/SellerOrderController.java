@@ -39,6 +39,7 @@ public class SellerOrderController {
                              @RequestParam Map<String,Object> map){
         Sort sort = new Sort(sortLift.equals("desc")? Sort.Direction.DESC : Sort.Direction.ASC,sortBy);
         PageRequest pageRequest = PageRequest.of(pageNum - 1, pageSize, sort);
+
         Page<OrderVO> orderVOPage = orderService.findList(pageRequest);
         map.put("orderVOPage",orderVOPage);
         map.put("currentPage",pageNum);
