@@ -1,6 +1,7 @@
 package cn.lovingliu.sell.service.impl;
 
 import cn.lovingliu.sell.dataobject.ProductInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +21,7 @@ import java.math.BigDecimal;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Slf4j
 public class ProductServiceImplTest {
     @Autowired
     private ProductServiceImpl productService;
@@ -63,5 +65,19 @@ public class ProductServiceImplTest {
 
         ProductInfo result = productService.save(productInfo);
         Assert.assertNotNull(result);
+    }
+
+    @Test
+    public void onSale() {
+       ProductInfo productInfo = productService.onSale("test");
+       Assert.assertNotNull(productInfo);
+       log.error("商品信息:{}",productInfo);
+    }
+
+    @Test
+    public void offSale() {
+        ProductInfo productInfo = productService.offSale("test");
+        Assert.assertNotNull(productInfo);
+        log.error("商品信息:{}",productInfo);
     }
 }

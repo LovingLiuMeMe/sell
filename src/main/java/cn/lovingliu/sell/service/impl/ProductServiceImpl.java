@@ -90,4 +90,35 @@ public class ProductServiceImpl implements ProductService {
            productInfoRepository.save(productInfo);
         }
     }
+
+    /**
+     * @Desc seller实现商品的上架
+     * @Author LovingLiu
+    */
+    public ProductInfo onSale(String productId){
+        ProductInfo productInfo = productInfoRepository.findById(productId).orElse(null);
+        if(productId == null){
+            throw new SellException(ResultStatusEnum.PRODUCT_NOT_EXIT);
+        }
+        if(productInfo.getProductStatus() == ProductStatusEnum.UP.getCode()){
+            throw new SellException(ResultStatusEnum.PRODUCT_STATUS_ERROR);
+        }
+        productInfo.setProductStatus(ProductStatusEnum.UP.getCode());
+        return productInfoRepository.save(productInfo);
+    }
+    /**
+     * @Desc seller实现商品的下架
+     * @Author LovingLiu
+    */
+    public ProductInfo offSale(String productId){
+        ProductInfo productInfo = productInfoRepository.findById(productId).orElse(null);
+        if(productId == null){
+            throw new SellException(ResultStatusEnum.PRODUCT_NOT_EXIT);
+        }
+        if(productInfo.getProductStatus() == ProductStatusEnum.DOWN.getCode()){
+            throw new SellException(ResultStatusEnum.PRODUCT_STATUS_ERROR);
+        }
+        productInfo.setProductStatus(ProductStatusEnum.DOWN.getCode());
+        return productInfoRepository.save(productInfo);
+    }
 }

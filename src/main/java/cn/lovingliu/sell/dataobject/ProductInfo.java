@@ -1,5 +1,6 @@
 package cn.lovingliu.sell.dataobject;
 
+import cn.lovingliu.sell.enums.ProductStatusEnum;
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -24,8 +25,10 @@ public class ProductInfo {
     private Integer productStock;
     private String productDescription;
     private String productIcon;
-    /** 商品状态: 0 正常 1下架*/
-    private Integer productStatus;
+    /** 商品状态:
+     *  0 正常 1下架
+     *  在商品创建时候 应该赋予一个默认值 */
+    private Integer productStatus = ProductStatusEnum.UP.getCode();
     private Integer categoryType;
 
     /** 排序字段需要使用*/

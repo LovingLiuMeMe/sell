@@ -306,5 +306,53 @@ public ModelAndView list(@RequestParam(value = "openid",required = true)String o
 "name": ""
 }
 ```
+### 13.修改商品时的小技巧
+1.传统 前端将商品的所有属性传递到后端 后端保存
+```java
+ public ModelAndView save(@Valid ProductForm productForm,
+                             BindingResult bindingResult,
+                             Map<String,Object> map){
+    /** 省略其他操作 **/
+    ProductInfo productInfo = new ProductInfo();
+    BeanUtils.copyProperties(productForm,productInfo);
+    productService.save(productInfo);
+}
+```
+2.前端只用传递 必要属性(id) 和 发生更改的属性即可
+```java
+    ProductInfo productInfo = productService.findOne(productForm.getProductId());
+    BeanUtils.copyProperties(productForm,productInfo);
+    productService.save(productInfo);
+```
+3.前端type='number'
+```java
+package cn.lovingliu.sell.form;
 
+import lombok.Data;
+
+import java.math.BigDecimal;
+
+/**
+ * @Author：LovingLiu
+ * @Description: seller端 保存/修改
+ * @Date：Created in 2019-09-30
+ */
+@Data
+public class ProductForm {
+    private String productId;
+    private String productName;
+    private String productDescription;
+    private String productIcon;
+    /**
+     * number(前端) -> BigDecimal controller 报错
+     * 怀疑是因为 精度丢失之类的情况发生,所有使用String
+    */
+    //private BigDecimal productPrice;
+    private String productPrice
+
+    private Integer productStock;
+    private Integer categoryType;
+}
+
+```
 

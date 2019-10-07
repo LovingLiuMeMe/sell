@@ -23,7 +23,8 @@ public enum ResultStatusEnum {
   ORDER_UPDATE_FAIL(15,"订单更新失败"),
     ORDER_STATUS_ERROR(16,"订单状态错误"),
     ORDER_PAY_STATUS_ERROR(17,"订单支付状态错误"),
-    ORDER_OWNER_ERROR(18,"该订单不属于当前用户");
+    ORDER_OWNER_ERROR(18,"该订单不属于当前用户"),
+    PRODUCT_STATUS_ERROR(19,"商品状态错误");
   private Integer code;
   private String msg;
 
