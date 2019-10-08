@@ -14,9 +14,7 @@ import cn.lovingliu.sell.exception.SellException;
 import cn.lovingliu.sell.repository.OrderDetailRepository;
 import cn.lovingliu.sell.repository.OrderMasterRepository;
 import cn.lovingliu.sell.repository.ProductInfoRepository;
-import cn.lovingliu.sell.service.OrderService;
-import cn.lovingliu.sell.service.PayService;
-import cn.lovingliu.sell.service.ProductService;
+import cn.lovingliu.sell.service.*;
 import cn.lovingliu.sell.util.BigDecimalUtil;
 import cn.lovingliu.sell.util.KeyUtil;
 import cn.lovingliu.sell.vo.OrderVO;
@@ -54,6 +52,10 @@ public class OrderServiceImpl implements OrderService {
     private ProductService productService;
     @Autowired
     private PayService payService;
+    @Autowired
+    private PushService pushService;
+    @Autowired
+    private WebSocket webSocket;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.REPEATABLE_READ)
@@ -108,6 +110,8 @@ public class OrderServiceImpl implements OrderService {
         ).collect(Collectors.toList());
         productService.decreaseStock(cartDTOList);
 
+        // 6.发送websocket消息
+        webSocket.sendMessage(orderDTO.getOrderId());
 
         return orderDTO;
     }
@@ -173,7 +177,10 @@ public class OrderServiceImpl implements OrderService {
         }
         return orderDTO;
     }
-
+    /**
+     * @Desc 完结订单
+     * @Author LovingLiu
+    */
     @Override
     @Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.REPEATABLE_READ)
     public OrderDTO finish(OrderDTO orderDTO) {
@@ -193,6 +200,10 @@ public class OrderServiceImpl implements OrderService {
             throw new SellException(ResultStatusEnum.ORDER_UPDATE_FAIL);
         }
         orderDTO.setOrderStatus(OrderStatusEnum.FINISGHED.getCode());
+
+        // 订单完结（推送微信模版消息）
+        pushService.orderStatus(orderDTO);
+
         return orderDTO;
     }
 

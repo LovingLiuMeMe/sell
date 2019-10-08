@@ -356,3 +356,65 @@ public class ProductForm {
 
 ```
 
+### 14.springBoot webSocket
+1.引入依赖
+```xml
+<!-- websocket依赖 -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-websocket</artifactId>
+</dependency>
+```
+2.配置类编写
+```java
+package cn.lovingliu.sell.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+import org.springframework.web.socket.server.standard.ServerEndpointExporter;
+
+/**
+ * @Author：LovingLiu
+ * @Description: websocket的配置
+ * @Date：Created in 2019-10-08
+ */
+@Component
+public class WebsocketConfig {
+    @Bean
+    public ServerEndpointExporter serverEndpointExporter(){
+        return new ServerEndpointExporter();
+    }
+}
+```
+3.编写特殊的controller
+```java
+package cn.lovingliu.sell.service;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
+import javax.websocket.server.ServerEndpoint;
+import java.util.concurrent.CopyOnWriteArraySet;
+
+/**
+ * @Author：LovingLiu
+ * @Description: websocket 区别于一般的Controller
+ * @Date：Created in 2019-10-08
+ */
+@Component
+@ServerEndpoint("/webSoket")
+@Slf4j
+public class WebSocket {
+    private Session session;
+
+    private static CopyOnWriteArraySet<WebSocket> webSocketSet = new CopyOnWriteArraySet<>();
+    @OnOpen
+    public void onOpen(Session session){
+        this.session = session;
+        webSocketSet.add(this);
+        log.info("【websocket消息】有新的连接");
+    }
+}
+```
