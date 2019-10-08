@@ -52,4 +52,11 @@ public class WechatAccountConfig {
      */
     private String notifyUrl;
 
+    /**
+     * 微信开放平台
+    */
+    private String openAppid;
+    private String openSecret;
+
+
 }

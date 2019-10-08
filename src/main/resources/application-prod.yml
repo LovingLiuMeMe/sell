@@ -19,3 +19,11 @@ wx:
     mchKey: 商户密钥
     keyPath: 商户证书地址
     notifyUrl: 异步通知地址
+    openAppid: wxddd4a5b712403710 #（开发平台）
+    openSecret: 145910bc8a631214e3c6216f2290bb38 #（开发平台）
+
+project-url:
+  wechatMpAuthorize: http://2a3789d893.zicp.vip/
+  wechatOpenAuthorize: http://2a3789d893.zicp.vip/
+  sell: http://2a3789d893.zicp.vip/
+

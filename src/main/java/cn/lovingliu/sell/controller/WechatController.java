@@ -1,5 +1,6 @@
 package cn.lovingliu.sell.controller;
 
+import cn.lovingliu.sell.config.ProjectUrlConfig;
 import cn.lovingliu.sell.enums.ResultStatusEnum;
 import cn.lovingliu.sell.exception.SellException;
 import lombok.extern.slf4j.Slf4j;
@@ -25,13 +26,20 @@ import java.net.URLEncoder;
 public class WechatController {
     @Autowired
     private WxMpService wxMpService;
+
+    @Autowired
+    private WxMpService wxOpenService;
+
+    @Autowired
+    private ProjectUrlConfig projectUrlConfig;
+
     /**
      * @Desc returnUrl 前端传入 获取到openid后跳转的页面 如:login->main
      * @Author LovingLiu
     */
     @GetMapping("authorize")
     public String authorize(String returnUrl){
-        String willRedirectUrl = "http://d37a1d85.ngrok.io/sell/wechat/userinfo";
+        String willRedirectUrl = projectUrlConfig.getWechatMpAuthorize()+"sell/wechat/userinfo";
         String redirectUrl = this.wxMpService.oauth2buildAuthorizationUrl(willRedirectUrl, WxConsts.OAuth2Scope.SNSAPI_USERINFO, URLEncoder.encode(returnUrl));
         log.info("【微信网页授权获取code】{}",redirectUrl);
         // 重定向到授权页面 注意:个人公众号到以后 都是无法进行开发的
@@ -39,7 +47,8 @@ public class WechatController {
     }
 
     @GetMapping("userinfo")
-    public String userinfo(String code, @RequestParam(value = "state")String returnUrl){
+    public String userinfo(@RequestParam(value = "code")String code,
+                           @RequestParam(value = "state")String returnUrl){
         WxMpOAuth2AccessToken wxMpOAuth2AccessToken = new WxMpOAuth2AccessToken();
         try{
             wxMpOAuth2AccessToken = wxMpService.oauth2getAccessToken(code);
@@ -47,6 +56,35 @@ public class WechatController {
             log.info("【微信网页授权异常】{}",e);
             throw new SellException(ResultStatusEnum.WECHAT_MP_ERROR);
         }
+        String openId= wxMpOAuth2AccessToken.getOpenId();
+        return "redirect:" + returnUrl+"?openid="+openId;
+    }
+    /**
+     * @Desc  网页授权获取二维码
+     * @Author LovingLiu
+    */
+    @GetMapping("qrAuthorize")
+    public String qrauthorize(@RequestParam("returnUrl") String returnUrl) {
+        String willRedirectUrl = projectUrlConfig.getWechatOpenAuthorize()+"sell/wechat/qrUserInfo";
+        String redirectUrl = wxOpenService.buildQrConnectUrl(willRedirectUrl, WxConsts.QrConnectScope.SNSAPI_LOGIN,URLEncoder.encode(returnUrl));
+
+        return "redirect:"+redirectUrl;
+    }
+    /**
+     * @Desc  网页授权获取二维码
+     * @Author LovingLiu
+     */
+    @GetMapping("qrUserInfo")
+    public String qrUserInfo(@RequestParam(value = "code")String code,
+                             @RequestParam(value = "state")String returnUrl) {
+        WxMpOAuth2AccessToken wxMpOAuth2AccessToken = new WxMpOAuth2AccessToken();
+        try{
+            wxMpOAuth2AccessToken = wxMpService.oauth2getAccessToken(code);
+        }catch (Exception e){
+            log.info("【微信网页授权异常】{}",e);
+            throw new SellException(ResultStatusEnum.WECHAT_MP_ERROR);
+        }
+        log.info("wxMpOAuth2AccessToken",wxMpOAuth2AccessToken);
         String openId= wxMpOAuth2AccessToken.getOpenId();
         return "redirect:" + returnUrl+"?openid="+openId;
     }
