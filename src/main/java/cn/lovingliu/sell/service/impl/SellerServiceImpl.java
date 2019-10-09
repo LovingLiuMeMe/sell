@@ -19,4 +19,5 @@ public class SellerServiceImpl implements SellerService {
     public SellerInfo findSellerInfoByOpenid(String openid){
         return sellerInfoRepository.findByOpenid(openid);
     }
+
 }

@@ -43,6 +43,7 @@ public class BuyerOrderController {
         OrderDTO orderDTO = buyerService.findOrderOne(openid, orderId);
         return ServerResponse.createBySuccess(orderDTO);
     }
+
     /**
      * @Desc 获得我的所有订单列表
      * @Author LovingLiu
@@ -60,6 +61,7 @@ public class BuyerOrderController {
 
         return ServerResponse.createBySuccess(orderDTOPage);
     }
+
     /**
      * @Desc 创建订单
      * @Author LovingLiu
@@ -79,6 +81,7 @@ public class BuyerOrderController {
         Map<String,String> resultMap = new HashMap<>();
         resultMap.put("orderId",resultDto.getOrderId());
         return ServerResponse.createBySuccess(resultMap);
+        // throw new ResponseBankException(ResultStatusEnum.PRODUCT_NOT_EXIT); 测试改变http响应的接口异常
     }
 
     /**

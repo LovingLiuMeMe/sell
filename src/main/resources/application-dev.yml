@@ -42,3 +42,7 @@ projectUrl:
   wechatMpAuthorize: http://2a3789d893.zicp.vip/
   wechatOpenAuthorize: http://2a3789d893.zicp.vip/
   sell: http://2a3789d893.zicp.vip/
+# 设置日志级别 打印sql
+logging:
+  level:
+    cn.lovingliu.sell.dataobject.mapper: trace

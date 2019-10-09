@@ -2,13 +2,16 @@ package cn.lovingliu.sell.handle;
 
 import cn.lovingliu.sell.common.ServerResponse;
 import cn.lovingliu.sell.config.ProjectUrlConfig;
+import cn.lovingliu.sell.exception.ResponseBankException;
 import cn.lovingliu.sell.exception.SellAuthorizeException;
 import cn.lovingliu.sell.exception.SellException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -50,4 +53,14 @@ public class ExceptionHandle {
                 .concat("/sell/seller/login"));
     }
 
+    /**
+     * @Desc 错误请求码定制
+     * @Author LovingLiu
+    */
+    @ExceptionHandler(ResponseBankException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ServerResponse resolveBankException(Exception e){
+        return ServerResponse.createByErrorMessage("请求银行接口错误");
+    }
 }
