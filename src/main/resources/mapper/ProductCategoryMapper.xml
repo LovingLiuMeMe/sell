@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.lovingliu.sell.dataobject.mapper.ProductCategoryMapper">
+    <!-- mapper 文件所在的路径-->
+    <resultMap id="ProductCategoryMap" type="cn.lovingliu.sell.dataobject.ProductCategory">
+        <id property="categoryId" column="category_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result property="categoryName" column="category_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="categoryType" column="category_type" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" javaType="java.util.Date" jdbcType="DATE"/>
+        <result property="updateTime" column="update_time" javaType="java.util.Date" jdbcType="DATE"/>
+    </resultMap>
+    <sql id="base_column">
+        category_id,category_name,category_type,create_time,update_time
+    </sql>
+    <select id="selectByCategoryType" parameterType="int" resultMap="ProductCategoryMap">
+        select
+        <include refid="base_column"/>
+        from product_category
+        where category_type = #{categoryType,jdbcType=INTEGER}
+    </select>
+</mapper>

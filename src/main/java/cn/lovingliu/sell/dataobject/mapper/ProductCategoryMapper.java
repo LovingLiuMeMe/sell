@@ -62,5 +62,9 @@ public interface ProductCategoryMapper {
     int deleteByCategoryIdAndType(@Param("categoryType") Integer categoryType,
                                   @Param("categoryId") Integer categoryId);
 
-
+    /**
+     * @Desc  xml方式实现mybatis
+     * @Author LovingLiu
+    */
+    ProductCategory selectByCategoryType(Integer categoryType);
 }

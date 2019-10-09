@@ -61,4 +61,10 @@ public class ProductCategoryMapperTest {
         int changeCount = productCategoryMapper.deleteByCategoryIdAndType(5,10);
         Assert.assertEquals(changeCount,1);
     }
+
+    @Test
+    public void selectByCategoryType(){
+        ProductCategory productCategory = productCategoryMapper.selectByCategoryType(5);
+        log.info("【xml方式的mybatis】=>{}",productCategory);
+    }
 }
