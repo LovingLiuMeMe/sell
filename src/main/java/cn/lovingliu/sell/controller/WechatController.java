@@ -39,11 +39,16 @@ public class WechatController {
     */
     @GetMapping("authorize")
     public String authorize(String returnUrl){
-        String willRedirectUrl = projectUrlConfig.getWechatMpAuthorize()+"sell/wechat/userinfo";
-        String redirectUrl = this.wxMpService.oauth2buildAuthorizationUrl(willRedirectUrl, WxConsts.OAuth2Scope.SNSAPI_USERINFO, URLEncoder.encode(returnUrl));
-        log.info("【微信网页授权获取code】{}",redirectUrl);
-        // 重定向到授权页面 注意:个人公众号到以后 都是无法进行开发的
-        return "redirect:"+redirectUrl;
+        try{
+            String willRedirectUrl = projectUrlConfig.getWechatMpAuthorize()+"sell/wechat/userinfo";
+            String redirectUrl = this.wxMpService.oauth2buildAuthorizationUrl(willRedirectUrl, WxConsts.OAuth2Scope.SNSAPI_USERINFO, URLEncoder.encode(returnUrl,"UTF-8"));
+            log.info("【微信网页授权获取code】{}",redirectUrl);
+            // 重定向到授权页面 注意:个人公众号到以后 都是无法进行开发的
+            return "redirect:"+redirectUrl;
+        }catch (Exception e){
+            throw new SellException(ResultStatusEnum.ENCODE_ERROR);
+        }
+
     }
 
     @GetMapping("userinfo")
@@ -65,10 +70,16 @@ public class WechatController {
     */
     @GetMapping("qrAuthorize")
     public String qrauthorize(@RequestParam("returnUrl") String returnUrl) {
-        String willRedirectUrl = projectUrlConfig.getWechatOpenAuthorize()+"sell/wechat/qrUserInfo";
-        String redirectUrl = wxOpenService.buildQrConnectUrl(willRedirectUrl, WxConsts.QrConnectScope.SNSAPI_LOGIN,URLEncoder.encode(returnUrl));
+        try{
+            String willRedirectUrl = projectUrlConfig.getWechatOpenAuthorize()+"sell/wechat/qrUserInfo";
+            String redirectUrl = wxOpenService.buildQrConnectUrl(willRedirectUrl, WxConsts.QrConnectScope.SNSAPI_LOGIN,URLEncoder.encode(returnUrl,"UTF-8"));
 
-        return "redirect:"+redirectUrl;
+            return "redirect:"+redirectUrl;
+        }catch (Exception e){
+            log.error("【url转码错误】{}",e.getMessage());
+            throw new SellException(ResultStatusEnum.ENCODE_ERROR);
+        }
+
     }
     /**
      * @Desc  网页授权获取二维码

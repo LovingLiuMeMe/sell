@@ -28,6 +28,7 @@ public enum ResultStatusEnum {
     LOGOUT_FAIL(21,"登出失败"),
     LOGOUT_SUCCESS(22,"登出成功"),
     AUTHORIZE_FAIL(23,"校验失败"),
+    ENCODE_ERROR(24,"编码错误"),
     PRODUCT_STATUS_ERROR(19,"商品状态错误");
 
   private Integer code;
