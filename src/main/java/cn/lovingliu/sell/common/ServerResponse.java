@@ -12,6 +12,8 @@ import java.io.Serializable;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ServerResponse<T> implements Serializable {
+    private static final long serialVersionUID = -7104817146255245711L;
+
     private int code;
     private String msg;
     private T data;

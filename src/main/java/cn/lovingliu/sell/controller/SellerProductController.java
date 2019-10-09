@@ -13,6 +13,7 @@ import cn.lovingliu.sell.vo.ProductInfoVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +37,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/seller/product/")
+//@CacheConfig(cacheNames = "product")
 public class  SellerProductController {
     @Autowired
     private ProductService productService;
@@ -118,10 +120,11 @@ public class  SellerProductController {
         return new ModelAndView("product/index",map);
     }
     /**
-     * @Desc 商品保存/修改
+     * @Desc 商品保存/修改 CacheEvict发生修改时 直接删除@CachePut
      * @Author LovingLiu
     */
     @PostMapping("save")
+    @CacheEvict(value = "product",key = "123")
     public ModelAndView save(@Valid ProductForm productForm,
                              BindingResult bindingResult,
                              Map<String,Object> map){

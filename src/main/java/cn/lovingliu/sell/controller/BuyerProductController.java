@@ -12,6 +12,7 @@ import cn.lovingliu.sell.vo.ProductInfoVO;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -38,12 +39,17 @@ public class BuyerProductController {
 
     @Value("${sell.imageHost}")
     private String imageHost;
-
+    /**
+     * @Desc String sellerId 并无实际用处 单纯的测试缓存效果
+     * @Author LovingLiu
+    */
     @GetMapping("list")
+    @Cacheable(value = "product",key = "#sellerId",condition = "#sellerId != null && #sellerId.length() > 3",unless = "#result.code != 0")
     public ServerResponse<List<ProductCategoryVO>> list(@RequestParam(value = "pageNum",defaultValue = "1")Integer pageNum,
                                                   @RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
                                                   @RequestParam(value = "sortBy",defaultValue = "productPrice")String sortBy,
-                                                  @RequestParam(value = "sortLift",defaultValue = "desc")String sortLift){
+                                                  @RequestParam(value = "sortLift",defaultValue = "desc")String sortLift,
+                                                  @RequestParam(value = "sellerId",required = false) String sellerId){
 
         // 1.更具条件查询所有的商品
         Sort sort = new Sort(sortLift.equals("desc")? Sort.Direction.DESC : Sort.Direction.ASC,sortBy);
